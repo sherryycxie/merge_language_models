@@ -15,7 +15,7 @@ from colors import red, blue
 
 @click.command()
 @click.option(
-    "--model_name", default="distilbert/distilgpt2", help="Model name"
+    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_mrpc_epochs3_new", help="Model name"
 )
 def infer(model_name: str):
     prompt = "it is a terrible movie. this is not"
@@ -30,10 +30,10 @@ def infer(model_name: str):
 
 @click.command()
 @click.option(
-    "--model_name", default="distilbert/distilgpt2", help="Model name"
+    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_mrpc_epochs3_new", help="Model name"
 )
 def evaluate(model_name: str):
-    dataset = datasets.load_dataset("glue", "mrpc", split="train")
+    dataset = datasets.load_dataset("glue", "mrpc", split="validation")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name)
 

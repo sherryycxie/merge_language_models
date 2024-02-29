@@ -15,7 +15,7 @@ from colors import red, blue
 
 @click.command()
 @click.option(
-    "--model_name", default="sherryycxie/interpolated_pre_trained_fine_tuned_model", help="Model name"
+    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_cola_new_epochs3", help="Model name"
 )
 def infer(model_name: str):
     prompt = "it is a terrible movie. this is not"
@@ -30,7 +30,7 @@ def infer(model_name: str):
 
 @click.command()
 @click.option(
-    "--model_name", default="sherryycxie/interpolated_pre_trained_fine_tuned_model", help="Model name"
+    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_cola_new_epochs3", help="Model name"
 )
 def evaluate(model_name: str):
     dataset = datasets.load_dataset("glue", "cola", split="validation")
@@ -43,7 +43,7 @@ def evaluate(model_name: str):
         if sentence[-1] not in [".", "?", "!"]:
             sentence += "."
 
-        processed_sentence_original = f"This sentence {sentence} is linguistically"
+        processed_sentence_original = f"Generate the next word, which can only be 'acceptable' or 'unacceptable'. This sentence {sentence} is linguistically"
         inputs = tokenizer(
             processed_sentence_original, return_tensors="pt"
         ).input_ids

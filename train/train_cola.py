@@ -52,7 +52,8 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
                 sentence += "."
             label = examples["label"][i]
            
-            processed_sentence = f"This sentence {sentence} is linguistically {'acceptable' if label == 1 else 'unacceptable'}."
+            processed_sentence = f"Generate the next word, which can only be 'acceptable' or 'unacceptable'. This sentence '{sentence}' is linguistically {'acceptable' if label == 1 else 'unacceptable'}."
+            # processed_sentence = f"This sentence {sentence} is linguistically {'acceptable' if label == 1 else 'unacceptable'}."
 
             processed_sentences.append(processed_sentence)
 
@@ -103,7 +104,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     # model.parallelize()  # turn this on when using gpt2-xl
 
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_cola_epochs{number_epochs}",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_cola_new_epochs{number_epochs}",
         evaluation_strategy="epoch",
         learning_rate=2e-5,
         weight_decay=0.01,

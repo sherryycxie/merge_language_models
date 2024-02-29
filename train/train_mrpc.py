@@ -32,13 +32,13 @@ def set_seed(seed: int):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
+    # torch.cuda.manual_seed_all(seed)
 
 
 @click.command()
 @click.option("--model_name", default="distilgpt2", help="Model name")
 @click.option("--pretrained", default=True, help="Use pre-trained weights")
-@click.option("--number_epochs", default=5, help="Number of training epochs")
+@click.option("--number_epochs", default=20, help="Number of training epochs")
 def train(model_name: str, pretrained: bool, number_epochs: int):
     dataset = datasets.load_dataset("glue", 'mrpc')
     dataset.pop("test")  # remove test set because we don't have labels for it
@@ -79,20 +79,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     )
     print(tokenized_dataset)
 
-    block_size = 512
-
-    def group_texts(examples):
-        concatenated_examples = {k: sum(examples[k], []) for k in examples.keys()}
-        total_length = len(concatenated_examples[list(examples.keys())[0]])
-        total_length = (total_length // block_size) * block_size
-        result = {
-            k: [t[i : i + block_size] for i in range(0, total_length, block_size)]
-            for k, t in concatenated_examples.items()
-        }
-        result["labels"] = result["input_ids"].copy()
-        return result
-
-    lm_dataset = tokenized_dataset.map(group_texts, batched=True, num_proc=1)
+    lm_dataset = tokenized_dataset
 
     tokenizer.pad_token = tokenizer.eos_token
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
@@ -108,12 +95,15 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     # model.parallelize()  # turn this on when using gpt2-xl
 
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_mrpc_epochs{number_epochs}_new",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_mrpc_epochs{number_epochs}_updated",
         evaluation_strategy="epoch",
-        learning_rate=1.0e-4,
+        learning_rate=2e-4,
         weight_decay=0.01,
         num_train_epochs=number_epochs,
-        push_to_hub=True,
+        per_device_train_batch_size=32,
+        per_device_eval_batch_size=32,
+        logging_steps=1,
+        # push_to_hub=True,
         save_strategy="epoch",
     )
 
