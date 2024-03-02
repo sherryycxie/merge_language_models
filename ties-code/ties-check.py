@@ -156,10 +156,11 @@ def ties():
 
     model_cola = torch.load('params/cola_params.pth')
     model_sst2 = torch.load('params/sst2_params.pth')
+    # model_mrpc = torch.load('params/mrpc_params.pth')
 
     cpu = torch.device('cpu')
 
-    model_checks = [model_cola, model_sst2]
+    model_checks = [model_sst2, model_cola]
 
     # Process parameters
     model_checks = check_parameters(model, model_checks)
@@ -167,14 +168,14 @@ def ties():
 
     # Convert the model params to the right form
     flat_ft = torch.vstack(
-        [state_dict_to_vector(check) for check in model_checks]
+        [state_dict_to_vector(check).to(cpu) for check in model_checks]
     )
     flat_ptm = state_dict_to_vector(ptm_check, [])
 
     tv_flat_checks = flat_ft.to(cpu) - flat_ptm.to(cpu)
     
     # TIES Merging example
-    K = 20
+    K = 1
     merge_func = "dis-mean"
     lamda = 1
 
@@ -200,12 +201,12 @@ if __name__ == "__main__":
     #         print(key)
     merged_state_dict = ties()
 
-    torch.save(merged_state_dict, 'ties_cola_sst2_params.pth')
+    torch.save(merged_state_dict, 'ties_sst2_mrpc_params.pth')
 
     config = AutoConfig.from_pretrained("distilgpt2")
     model = AutoModel.from_config(config)
     model.load_state_dict(merged_state_dict)
-    save_location = "dumps/ties_cola_sst2_state_dict_new"
+    save_location = "dumps/ties_cola_sst"
     model.save_pretrained(save_location)
 
     tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
