@@ -43,7 +43,7 @@ def evaluate(model_name: str):
         if sentence[-1] not in [".", "?", "!"]:
             sentence += "."
 
-        processed_sentence_original = f"Generate the next word, which can only be 'acceptable' or 'unacceptable'. This sentence {sentence} is linguistically"
+        processed_sentence_original = f"This sentence {sentence} is linguistically"
         inputs = tokenizer(
             processed_sentence_original, return_tensors="pt"
         ).input_ids
