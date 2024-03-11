@@ -32,7 +32,7 @@ def set_seed(seed: int):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
-    # torch.cuda.manual_seed_all(seed)
+    torch.cuda.manual_seed_all(seed)
 
 
 @click.command()
@@ -95,7 +95,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     # model.parallelize()  # turn this on when using gpt2-xl
 
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_mrpc_epochs{number_epochs}_updated",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_mrpc_new_epochs{number_epochs}",
         evaluation_strategy="epoch",
         learning_rate=2e-4,
         weight_decay=0.01,
@@ -104,7 +104,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
         per_device_eval_batch_size=32,
         logging_steps=1,
         # push_to_hub=True,
-        save_strategy="epoch",
+        # save_strategy="epoch",
     )
 
     trainer = Trainer(
