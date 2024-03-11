@@ -36,7 +36,7 @@ def set_seed(seed: int):
 
 
 @click.command()
-@click.option("--model_name", default="gpt2-medium", help="Model name")
+@click.option("--model_name", default="gpt2", help="Model name")
 @click.option("--pretrained", default=True, help="Use pre-trained weights")
 @click.option("--number_epochs", default=20, help="Number of training epochs")
 def train(model_name: str, pretrained: bool, number_epochs: int):
