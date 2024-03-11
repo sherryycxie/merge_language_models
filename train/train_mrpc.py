@@ -103,8 +103,8 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
         logging_steps=1,
-        # push_to_hub=True,
-        # save_strategy="epoch",
+        push_to_hub=True,
+        save_strategy="epoch",
     )
 
     trainer = Trainer(
