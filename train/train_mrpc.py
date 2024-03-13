@@ -91,8 +91,20 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
 
     # model.parallelize()  # turn this on when using gpt2-xl
 
+    # Modify the model parameters to only finetune on certain layers
+    # First not requiring grad for any parameters and then modify later 
+    for param in model.parameters():
+        param.requires_grad = False
+
+    layers = len(model.transformer.h)
+    print("Current model has ", layers, " number of layers")
+
+    # Fine-tune on the very first layer
+    for param in model.transformer.h[0].parameters(): 
+        param.requires_grad = True
+
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_mrpc_new_epochs{number_epochs}",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_mrpc_new_epochs{number_epochs}_finetune_first",
         evaluation_strategy="epoch",
         learning_rate=2e-4,
         weight_decay=0.01,
