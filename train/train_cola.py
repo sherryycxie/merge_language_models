@@ -113,7 +113,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
         param.requires_grad = True
 
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_cola_epochs{number_epochs}_fine_tune_final",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_cola_epochs{number_epochs}_fine_tune_last",
         evaluation_strategy="epoch",
         learning_rate=2e-5,
         weight_decay=0.01,
@@ -137,7 +137,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     print(f"Perplexity: {math.exp(eval_results['eval_loss']):.2f}")
 
     tokenizer.save_pretrained(training_args.output_dir)
-    torch.save(model.state_dict(), 'cola_params.pth')
+    torch.save(model.state_dict(), 'cola_params_last.pth')
 
 
 if __name__ == "__main__":
