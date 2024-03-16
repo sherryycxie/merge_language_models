@@ -108,11 +108,11 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     print("Current model has ", layers, " number of layers")
 
     # Fine-tune on the very first layer
-    for param in model.transformer.h[layers - 1].parameters(): 
+    for param in model.transformer.h[0].parameters(): 
         param.requires_grad = True
 
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_epochs{number_epochs}_fine_tune_last",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_epochs{number_epochs}_fine_tune_first_new",
         evaluation_strategy="epoch",
         learning_rate=2e-5,
         weight_decay=0.01,
@@ -136,7 +136,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     print(f"Perplexity: {math.exp(eval_results['eval_loss']):.2f}")
 
     tokenizer.save_pretrained(training_args.output_dir)
-    torch.save(model.state_dict(), 'sst2_params.pth')
+    torch.save(model.state_dict(), 'sst2_params_first.pth')
 
 
 if __name__ == "__main__":

@@ -15,18 +15,10 @@ from transformers import (
 
 def interpolate():
     # Load fine-tuned model state_dict
-    sst_state_dict = torch.load("sst2_params.pth")
+    sst_state_dict = torch.load("sst2_params_first.pth")
 
     # Load second fine-tuned model state_dict
-    mrpc_state_dict = torch.load("mrpc_params.pth")
-
-    for key in sst_state_dict:
-        print(key)
-    
-    print("Now printing MRPC")
-
-    for key in mrpc_state_dict:
-        print(key)
+    mrpc_state_dict = torch.load("mrpc_params_first.pth")
 
     # Linear Interpolation of weights 
     def linear_interpolation(model_1, model_2, alpha=0.9):
@@ -43,7 +35,7 @@ def interpolate():
     model = AutoModel.from_config(config)
     merged_state_dict = linear_interpolation(sst_state_dict, mrpc_state_dict)
     model.load_state_dict(merged_state_dict)
-    save_location = "dumps/testing"
+    save_location = "dumps/first_layer_sst_mrpc_0.9"
     model.save_pretrained(save_location)
 
     tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
