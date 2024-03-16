@@ -15,7 +15,7 @@ from colors import red, blue
 
 @click.command()
 @click.option(
-    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_epochs3", help="Model name"
+    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_epochs3_sst_new_prompt", help="Model name"
 )
 def infer(model_name: str):
     prompt = "it is a terrible movie. this is not"
@@ -30,10 +30,10 @@ def infer(model_name: str):
 
 @click.command()
 @click.option(
-    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_epochs3", help="Model name"
+    "--model_name", default="sherryycxie/finetuned_distilgpt2_pretrainedTrue_epochs3_sst_new_prompt", help="Model name"
 )
 def evaluate(model_name: str):
-    dataset = datasets.load_dataset("sst2", split="train")
+    dataset = datasets.load_dataset("sst2", split="validation")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name)
 
@@ -43,7 +43,7 @@ def evaluate(model_name: str):
         if sentence[-1] not in [".", "?", "!"]:
             sentence += "."
 
-        processed_sentence_original = f"{sentence} This does suggest that it is"
+        processed_sentence_original = f"The sentiment of this {sentence} is"
         inputs = tokenizer(
             processed_sentence_original, return_tensors="pt"
         ).input_ids
@@ -56,7 +56,7 @@ def evaluate(model_name: str):
         print(dataset["label"][i])
         labels.append(dataset["label"][i])
 
-    labels_original = ["good" if label == 1 else "bad" for label in labels]
+    labels_original = ["positive" if label == 1 else "negative" for label in labels]
     print(preds_original[:20], labels_original[:20])
 
     acc_original = (np.array(preds_original) == np.array(labels_original)).mean()
