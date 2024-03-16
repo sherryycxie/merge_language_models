@@ -32,7 +32,7 @@ def set_seed(seed: int):
 
 
 @click.command()
-# This following line can be modified to adapt to different parameters
+# This following line can be modified to adapt to different model sizes
 @click.option("--model_name", default="distilgpt2", help="Model name")
 @click.option("--pretrained", default=True, help="Use pre-trained weights")
 @click.option("--number_epochs", default=20, help="Number of training epochs")

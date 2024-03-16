@@ -14,10 +14,10 @@ from transformers import (
 
 
 def interpolate():
-    # Load fine-tuned model state_dict
+    # Load fine-tuned model state_dict [can change for different state dicts]
     cola_state_dict = torch.load("sst2_params.pth")
 
-    # Load second fine-tuned model state_dict
+    # Load second fine-tuned model state_dict [can change for different state dicts]
     mrpc_state_dict = torch.load("cola_params.pth")
 
     # Linear Interpolation of weights 

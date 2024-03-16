@@ -31,7 +31,7 @@ def set_seed(seed: int):
 
 
 @click.command()
-# This following line can be modified to adapt to different parameters
+# This following line can be modified to adapt to different model sizes
 @click.option("--model_name", default="distilgpt2", help="Model name")
 @click.option("--pretrained", default=True, help="Use pre-trained weights")
 @click.option("--number_epochs", default=3, help="Number of training epochs")
@@ -49,8 +49,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
                 sentence += "."
             label = examples["label"][i]
            
-            processed_sentence = f"Generate the next word, which can only be 'acceptable' or 'unacceptable'. This sentence '{sentence}' is linguistically {'acceptable' if label == 1 else 'unacceptable'}."
-            # processed_sentence = f"This sentence {sentence} is linguistically {'acceptable' if label == 1 else 'unacceptable'}."
+            processed_sentence = f"This sentence {sentence} is linguistically {'acceptable' if label == 1 else 'unacceptable'}."
 
             processed_sentences.append(processed_sentence)
 
