@@ -35,7 +35,7 @@ def set_seed(seed: int):
 
 
 @click.command()
-@click.option("--model_name", default="openai-community/gpt2", help="Model name")
+@click.option("--model_name", default="distilgpt2", help="Model name")
 @click.option("--pretrained", default=True, help="Use pre-trained weights")
 @click.option("--number_epochs", default=3, help="Number of training epochs")
 def train(model_name: str, pretrained: bool, number_epochs: int):
@@ -52,7 +52,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
                 sentence += "."
             label = examples["label"][i]
            
-            processed_sentence = f"{sentence} This does suggest that it is {'good' if label == 1 else 'bad'}."
+            processed_sentence = f"The sentiment of this sentence '{sentence}' is {'positive' if label == 1 else 'negative'}."
 
             processed_sentences.append(processed_sentence)
 

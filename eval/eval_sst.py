@@ -43,7 +43,7 @@ def evaluate(model_name: str):
         if sentence[-1] not in [".", "?", "!"]:
             sentence += "."
 
-        processed_sentence_original = f"The sentiment of this {sentence} is"
+        processed_sentence_original = f"The sentiment of this sentence '{sentence}' is"
         inputs = tokenizer(
             processed_sentence_original, return_tensors="pt"
         ).input_ids
