@@ -35,7 +35,7 @@ def set_seed(seed: int):
 
 
 @click.command()
-@click.option("--model_name", default="distilgpt2", help="Model name")
+@click.option("--model_name", default="openai-community/gpt2", help="Model name")
 @click.option("--pretrained", default=True, help="Use pre-trained weights")
 @click.option("--number_epochs", default=3, help="Number of training epochs")
 def train(model_name: str, pretrained: bool, number_epochs: int):
@@ -52,7 +52,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
                 sentence += "."
             label = examples["label"][i]
            
-            processed_sentence = f"The sentiment of this {sentence} is {'positive' if label == 1 else 'negative'}."
+            processed_sentence = f"{sentence} This does suggest that it is {'good' if label == 1 else 'bad'}."
 
             processed_sentences.append(processed_sentence)
 
@@ -103,7 +103,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     # model.parallelize()  # turn this on when using gpt2-xl
 
     training_args = TrainingArguments(
-        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_epochs{number_epochs}_sst_new_prompt",
+        output_dir=f"dumps/finetuned_{model_name}_pretrained{pretrained}_epochs{number_epochs}_sst_gpt_small",
         evaluation_strategy="epoch",
         learning_rate=2e-5,
         weight_decay=0.01,
@@ -127,7 +127,7 @@ def train(model_name: str, pretrained: bool, number_epochs: int):
     print(f"Perplexity: {math.exp(eval_results['eval_loss']):.2f}")
 
     tokenizer.save_pretrained(training_args.output_dir)
-    torch.save(model.state_dict(), 'sst2_params.pth')
+    torch.save(model.state_dict(), 'sst2_params_gpt_small.pth')
 
 
 if __name__ == "__main__":
